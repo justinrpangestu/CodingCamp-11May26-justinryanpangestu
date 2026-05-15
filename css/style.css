@@ -1,0 +1,694 @@
+/* ============================================================
+   Expense & Budget Visualizer — style.css
+   Pendekatan: Mobile-first, menggunakan CSS Variables
+   Referensi: Requirements 2.2, 6.4, 7.1, 7.2, 7.3
+   ============================================================ */
+
+/* ===== 1. CSS VARIABLES (Variabel Warna, Ukuran & Transisi) ===== */
+:root {
+  /* Warna utama */
+  --color-primary: #4f46e5;             /* Ungu — warna aksen utama */
+  --color-primary-dark: #3730a3;        /* Ungu gelap — hover state */
+  --color-primary-light: #eef2ff;       /* Ungu sangat terang — latar belakang halus */
+  --color-danger: #ef4444;              /* Merah — tombol hapus & error */
+  --color-danger-dark: #dc2626;         /* Merah gelap — hover state */
+  --color-success: #22c55e;             /* Hijau — konfirmasi sukses */
+
+  /* Warna gradien untuk kartu saldo & tombol utama */
+  --color-balance-gradient-start: #4f46e5;  /* Awal gradien — ungu indigo */
+  --color-balance-gradient-end: #7c3aed;    /* Akhir gradien — ungu violet */
+
+  /* Warna latar & teks */
+  --color-bg: #f3f4f6;                  /* Abu-abu terang — latar halaman */
+  --color-card: #ffffff;                /* Putih — latar kartu */
+  --color-text: #1f2937;                /* Abu-abu gelap — teks utama */
+  --color-text-muted: #6b7280;          /* Abu-abu sedang — teks sekunder */
+  --color-border: #e5e7eb;              /* Abu-abu terang — garis batas */
+
+  /* Warna saldo (dipertahankan untuk kompatibilitas) */
+  --color-balance-bg: #4f46e5;          /* Latar section saldo */
+  --color-balance-text: #ffffff;        /* Teks saldo */
+
+  /* Ukuran & jarak */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* Tipografi — menggunakan system font stack tanpa font eksternal */
+  --font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont,
+                 Tahoma, Geneva, Verdana, sans-serif;
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 2rem;      /* 32px */
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;          /* Sedikit lebih besar untuk tampilan modern */
+  --radius-full: 9999px;      /* Untuk badge dan elemen bulat */
+
+  /* Shadow */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);  /* Bayangan besar untuk efek hover */
+
+  /* Transisi — shorthand untuk konsistensi micro-interaction */
+  --transition: 0.2s ease;              /* Transisi standar untuk hover/focus */
+  --transition-fast: 0.15s ease;        /* Transisi cepat untuk feedback instan */
+  --transition-base: 0.25s ease;        /* Transisi lebih lambat untuk animasi halus */
+}
+
+/* ===== 2. RESET DASAR ===== */
+/* Menghapus margin/padding bawaan browser dan mengatur box-sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== 3. BASE STYLES ===== */
+/* Mengaktifkan smooth scrolling untuk seluruh halaman */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Latar belakang halaman dengan gradien halus agar tampilan lebih hidup */
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  background: linear-gradient(135deg, #f0f4ff 0%, #f3f4f6 100%);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ===== 4. LAYOUT CONTAINER ===== */
+/* Membatasi lebar konten dan memusatkannya — mobile-first */
+.container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--spacing-md);
+}
+
+/* ===== 5. HEADER ===== */
+/* Header terpusat dengan tampilan elegan */
+.app-header {
+  text-align: center;
+  padding: var(--spacing-lg) 0 var(--spacing-md);
+}
+
+/* Judul utama dengan efek teks gradien */
+.app-header h1 {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  margin-bottom: var(--spacing-xs);
+  /* Efek teks gradien menggunakan background-clip */
+  background: linear-gradient(135deg, var(--color-primary), #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  /* Fallback untuk browser yang tidak mendukung */
+  color: var(--color-primary);
+}
+
+/* Subjudul dengan warna muted */
+.app-subtitle {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+/* ===== 6. CARD COMPONENT ===== */
+/* Komponen kartu yang membungkus setiap section */
+.card {
+  background-color: var(--color-card);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  box-shadow: var(--shadow-md);
+  /* Transisi untuk efek hover lift */
+  transition: box-shadow var(--transition);
+}
+
+/* Efek angkat halus saat kartu di-hover (kecuali kartu saldo) */
+.card:not(#total-balance):hover {
+  box-shadow: var(--shadow-lg);
+}
+
+/* ===== 7. JUDUL SECTION ===== */
+/* Judul dengan aksen garis kiri berwarna primary */
+.section-title {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text);
+  /* Aksen garis kiri untuk hierarki visual */
+  border-left: 3px solid var(--color-primary);
+  padding-left: var(--spacing-sm);
+}
+
+/* ===== 8. SECTION SALDO TOTAL ===== */
+/* Kartu saldo dengan gradien agar menonjol secara visual */
+#total-balance {
+  /* Gradien latar belakang yang mencolok */
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: var(--color-balance-text);
+  text-align: center;
+  padding-top: 28px;
+  padding-bottom: 28px;
+  /* Bayangan dengan warna ungu untuk efek glow */
+  box-shadow: 0 8px 32px rgba(79, 70, 229, 0.35);
+  /* Posisi relatif untuk pseudo-element dekoratif */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Elemen dekoratif — lingkaran semi-transparan besar di sudut kanan atas */
+#total-balance::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+/* Elemen dekoratif kedua — lingkaran lebih kecil di sudut kiri bawah */
+#total-balance::after {
+  content: '';
+  position: absolute;
+  bottom: -40px;
+  left: -40px;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+}
+
+/* Judul section saldo — putih, uppercase, letter-spaced */
+#total-balance .section-title {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  /* Hapus border-left agar tidak mengganggu tampilan di atas gradien */
+  border-left: none;
+  padding-left: 0;
+  /* Pastikan teks di atas pseudo-element */
+  position: relative;
+  z-index: 1;
+}
+
+/* Angka saldo — besar, tebal, fluid sizing agar responsif */
+.balance-amount {
+  /* Ukuran fluid: minimum 1.8rem, ideal 5vw, maksimum 2.5rem */
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  font-weight: 800;
+  color: var(--color-balance-text);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  /* Pastikan teks di atas pseudo-element */
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== 9. FORM INPUT ===== */
+/* Jarak antar field form */
+.form-group {
+  margin-bottom: var(--spacing-md);
+}
+
+/* Label form — kecil, semibold */
+.form-group label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-text);
+}
+
+/* Style untuk input teks, angka, dan select */
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px var(--spacing-md);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  font-family: var(--font-family);
+  color: var(--color-text);
+  background-color: var(--color-card);
+  /* Transisi halus untuk border dan shadow saat fokus */
+  transition: border-color var(--transition),
+              box-shadow var(--transition);
+  /* Ukuran minimum untuk layar sentuh — aksesibilitas */
+  min-height: 48px;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* Efek focus ring berwarna indigo */
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+/* Placeholder dengan warna lebih terang */
+.form-group input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.7;
+}
+
+/* Tampilan select — tambahkan ikon panah kustom */
+.form-group select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236b7280' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+/* State error — border merah saat form-group memiliki class has-error */
+.form-group.has-error input,
+.form-group.has-error select {
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+}
+
+/* ===== 10. PESAN ERROR ===== */
+/* Teks merah kecil di bawah field yang error */
+.error-message {
+  display: block;
+  color: var(--color-danger);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  margin-top: var(--spacing-xs);
+  /* Mencegah layout shift saat pesan error muncul/hilang */
+  min-height: 1.4em;
+}
+
+/* ===== 11. TOMBOL UTAMA (Submit) ===== */
+/* Tombol submit dengan gradien dan efek hover yang halus */
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 12px var(--spacing-md);
+  /* Gradien yang sama dengan kartu saldo untuk konsistensi visual */
+  background: linear-gradient(135deg, var(--color-primary), #7c3aed);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  cursor: pointer;
+  /* Transisi untuk semua properti yang berubah saat hover/active */
+  transition: transform var(--transition),
+              box-shadow var(--transition),
+              filter var(--transition);
+  /* Ukuran minimum untuk layar sentuh */
+  min-height: 48px;
+  /* Bayangan awal yang halus */
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
+  letter-spacing: 0.02em;
+}
+
+/* Efek hover — sedikit terangkat dengan bayangan lebih dalam */
+.btn-primary:hover {
+  filter: brightness(0.92);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+}
+
+/* Efek active/press — kembali ke posisi semula */
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+}
+
+/* ===== 12. DAFTAR TRANSAKSI ===== */
+/* Daftar dengan scroll vertikal jika terlalu panjang */
+#transaction-list {
+  list-style: none;
+  max-height: 380px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar kustom agar lebih rapi (WebKit/Blink) */
+#transaction-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+#transaction-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#transaction-list::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+/* Pesan saat daftar kosong */
+.empty-message {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-xl) 0;
+  line-height: 2;
+}
+
+/* Satu item transaksi — flexbox row */
+.transaction-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Item terakhir tidak perlu border bawah */
+.transaction-item:last-child {
+  border-bottom: none;
+}
+
+/* Area informasi transaksi — mengisi sisa ruang */
+.transaction-info {
+  flex: 1;
+  min-width: 0; /* Mencegah overflow teks panjang */
+}
+
+/* Nama item — tebal, gelap, terpotong jika terlalu panjang */
+.transaction-name {
+  font-weight: 600;
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  /* Potong teks yang terlalu panjang dengan ellipsis */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Badge kategori — tampilan pill/badge yang rapi */
+.transaction-meta {
+  display: inline-block;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  border-radius: 999px;
+  padding: 1px 8px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-top: 3px;
+}
+
+/* Jumlah transaksi — merah, tebal, tidak wrap */
+.transaction-amount {
+  font-weight: 700;
+  color: var(--color-danger);
+  white-space: nowrap;
+  font-size: var(--font-size-sm);
+  flex-shrink: 0;
+}
+
+/* ===== 13. TOMBOL HAPUS ===== */
+/* Tampilan outlined secara default, filled saat hover */
+.btn-delete {
+  background-color: transparent;
+  border: 1.5px solid var(--color-danger);
+  color: var(--color-danger);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  /* Transisi halus untuk semua properti */
+  transition: background-color var(--transition),
+              color var(--transition),
+              box-shadow var(--transition);
+  /* Tidak menyusut saat ruang sempit */
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+/* Hover — latar merah, teks putih */
+.btn-delete:hover {
+  background-color: var(--color-danger);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+/* Active/press */
+.btn-delete:active {
+  background-color: var(--color-danger-dark);
+  color: #ffffff;
+}
+
+/* ===== 14. CONTAINER GRAFIK ===== */
+/* Section grafik pie pengeluaran per kategori */
+#chart-container {
+  /* Menggunakan padding dari .card */
+}
+
+/* Wrapper canvas — terpusat dengan lebar maksimum */
+.chart-wrapper {
+  position: relative;
+  max-width: 280px;
+  margin: 0 auto;
+  padding: var(--spacing-sm) 0;
+}
+
+/* Pesan kosong saat belum ada data grafik */
+.empty-chart-message {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-style: italic;
+  padding: var(--spacing-xl) 0;
+  line-height: 2;
+}
+
+/* ===== 15. AKSESIBILITAS — FOCUS VISIBLE ===== */
+/* Outline yang jelas untuk navigasi keyboard */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Hapus outline default hanya jika focus-visible tersedia */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ===== 16. MEDIA QUERY — DESKTOP (min-width: 768px) ===== */
+/* Peningkatan tampilan untuk layar yang lebih lebar */
+@media (min-width: 768px) {
+  /* Perlebar container dan tambah padding untuk desktop */
+  .container {
+    max-width: 680px;
+    padding: var(--spacing-xl);
+  }
+
+  /* Judul lebih besar di desktop */
+  .app-header h1 {
+    font-size: var(--font-size-3xl);
+  }
+
+  /* Saldo lebih besar di desktop */
+  .balance-amount {
+    font-size: clamp(2.2rem, 5vw, 3rem);
+  }
+
+  /* Padding kartu lebih lega di desktop */
+  .card {
+    padding: var(--spacing-xl);
+  }
+
+  /* Daftar transaksi lebih tinggi di desktop */
+  #transaction-list {
+    max-height: 450px;
+  }
+
+  /* Wrapper grafik sedikit lebih besar di desktop */
+  .chart-wrapper {
+    max-width: 360px;
+  }
+}
+
+/* ===== 17. REDUCED MOTION — AKSESIBILITAS ===== */
+/* Menonaktifkan semua animasi dan transisi untuk pengguna yang sensitif */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===== 18. FITUR OPSIONAL: KATEGORI KUSTOM ===== */
+/* Section tambah kategori kustom di bawah form utama */
+.custom-category-section {
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 1px dashed var(--color-border);
+}
+
+/* Judul section kategori kustom — lebih kecil dari section-title */
+.custom-category-title {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Row input + tombol dalam satu baris */
+.custom-category-input-row {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: flex-start;
+}
+
+/* Input kategori kustom — mengisi sisa ruang */
+.custom-category-input-row input {
+  flex: 1;
+  padding: 8px var(--spacing-md);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family);
+  color: var(--color-text);
+  background-color: var(--color-card);
+  transition: border-color var(--transition), box-shadow var(--transition);
+  min-height: 40px;
+}
+
+.custom-category-input-row input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+/* Tombol tambah kategori — compact, outlined style */
+.btn-add-category {
+  padding: 8px var(--spacing-md);
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition), color var(--transition);
+  white-space: nowrap;
+  min-height: 40px;
+  flex-shrink: 0;
+}
+
+.btn-add-category:hover {
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+.btn-add-category:active {
+  filter: brightness(0.9);
+}
+
+/* ===== 19. FITUR OPSIONAL: KONTROL PENGURUTAN ===== */
+/* Bar kontrol pengurutan di atas daftar transaksi */
+.sort-control {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-primary-light);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(79, 70, 229, 0.15);
+}
+
+/* Label "Urutkan:" di sebelah kiri dropdown */
+.sort-label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Dropdown pilihan urutan */
+.sort-select {
+  flex: 1;
+  padding: 6px var(--spacing-md);
+  border: 1.5px solid rgba(79, 70, 229, 0.3);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family);
+  color: var(--color-primary);
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  /* Ikon panah kustom berwarna ungu */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%234f46e5' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px;
+  appearance: none;
+  -webkit-appearance: none;
+  min-height: 36px;
+}
+
+.sort-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+/* ===== 20. FITUR OPSIONAL: SOROT PENGELUARAN BERLEBIH ===== */
+.limit-control {
+  margin-top: var(--spacing-md);
+  position: relative;
+  z-index: 1;
+}
+.limit-label {
+  display: block;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 4px;
+}
+.limit-input {
+  width: 100%;
+  padding: 6px 12px;
+  border: 1.5px solid rgba(255,255,255,0.4);
+  border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.15);
+  color: #ffffff;
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family);
+  min-height: 38px;
+}
+.limit-input::placeholder { color: rgba(255,255,255,0.5); }
+.limit-input:focus { outline: none; border-color: rgba(255,255,255,0.8); }
+
+/* State melebihi batas — latar merah mencolok */
+#total-balance.over-limit {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  box-shadow: 0 8px 32px rgba(220, 38, 38, 0.45);
+}

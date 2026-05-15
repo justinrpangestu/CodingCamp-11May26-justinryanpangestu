@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expense & Budget Visualizer</title>
+
+  <!-- Menghubungkan file CSS untuk tampilan -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Library Chart.js untuk membuat grafik pie -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Header aplikasi -->
+    <header class="app-header">
+      <h1>💰 Expense & Budget Visualizer</h1>
+      <p class="app-subtitle">Catat dan pantau pengeluaran harianmu</p>
+    </header>
+
+    <!-- ===== SECTION 1: SALDO TOTAL ===== -->
+    <!-- Menampilkan total semua pengeluaran yang tercatat -->
+    <section class="card" id="total-balance">
+      <h2 class="section-title">Total Pengeluaran</h2>
+      <p class="balance-amount">Rp 0</p>
+      <!-- Input batas pengeluaran -->
+      <div class="limit-control">
+        <label for="budget-limit" class="limit-label">Batas Anggaran (Rp)</label>
+        <input type="number" id="budget-limit" class="limit-input" placeholder="Contoh: 500000" min="1" />
+      </div>
+    </section>
+
+    <!-- ===== SECTION 2: FORM INPUT TRANSAKSI ===== -->
+    <!-- Formulir untuk menambahkan transaksi baru -->
+    <section class="card">
+      <h2 class="section-title">Tambah Pengeluaran</h2>
+
+      <form id="transaction-form" novalidate>
+
+        <!-- Field: Nama Item -->
+        <div class="form-group">
+          <label for="item-name">Nama Item</label>
+          <input
+            type="text"
+            id="item-name"
+            name="item-name"
+            placeholder="Contoh: Makan Siang"
+            autocomplete="off"
+          />
+          <!-- Pesan error akan muncul di sini -->
+          <span class="error-message" id="error-name"></span>
+        </div>
+
+        <!-- Field: Jumlah -->
+        <div class="form-group">
+          <label for="item-amount">Jumlah (Rp)</label>
+          <input
+            type="number"
+            id="item-amount"
+            name="item-amount"
+            placeholder="Contoh: 35000"
+            min="1"
+          />
+          <!-- Pesan error akan muncul di sini -->
+          <span class="error-message" id="error-amount"></span>
+        </div>
+
+        <!-- Field: Kategori -->
+        <div class="form-group">
+          <label for="item-category">Kategori</label>
+          <select id="item-category" name="item-category">
+            <option value="">-- Pilih Kategori --</option>
+          </select>
+          <!-- Pesan error akan muncul di sini -->
+          <span class="error-message" id="error-category"></span>
+        </div>
+
+        <!-- Tombol Submit -->
+        <button type="submit" class="btn-primary">
+          + Tambah Pengeluaran
+        </button>
+
+      </form>
+
+      <!-- ===== FITUR OPSIONAL: TAMBAH KATEGORI KUSTOM ===== -->
+      <!-- Pengguna bisa menambahkan kategori pengeluaran sendiri -->
+      <div class="custom-category-section">
+        <h3 class="custom-category-title">+ Tambah Kategori Baru</h3>
+        <form id="add-category-form" novalidate>
+          <div class="custom-category-input-row">
+            <input
+              type="text"
+              id="new-category-input"
+              placeholder="Contoh: Belanja, Kesehatan..."
+              maxlength="20"
+              autocomplete="off"
+            />
+            <button type="submit" class="btn-add-category">Tambah</button>
+          </div>
+          <span class="error-message" id="error-new-category"></span>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===== SECTION 3: DAFTAR TRANSAKSI ===== -->
+    <!-- Menampilkan semua transaksi yang sudah dicatat -->
+    <section class="card">
+      <h2 class="section-title">Riwayat Transaksi</h2>
+
+      <!-- ===== FITUR OPSIONAL: KONTROL PENGURUTAN ===== -->
+      <!-- Dropdown untuk mengurutkan daftar transaksi -->
+      <div class="sort-control">
+        <label for="sort-select" class="sort-label">Urutkan:</label>
+        <select id="sort-select" class="sort-select">
+          <option value="newest">🕐 Terbaru</option>
+          <option value="amount-desc">💰 Jumlah (Terbesar)</option>
+          <option value="amount-asc">💸 Jumlah (Terkecil)</option>
+          <option value="category-az">🔤 Kategori (A-Z)</option>
+        </select>
+      </div>
+
+      <!-- Daftar transaksi akan diisi oleh JavaScript -->
+      <ul id="transaction-list">
+        <!-- Konten dirender oleh js/app.js -->
+      </ul>
+    </section>
+
+    <!-- ===== SECTION 4: CONTAINER GRAFIK ===== -->
+    <!-- Menampilkan grafik pie pengeluaran per kategori -->
+    <section class="card" id="chart-container">
+      <h2 class="section-title">Grafik Pengeluaran</h2>
+
+      <!-- Canvas untuk Chart.js -->
+      <div class="chart-wrapper">
+        <canvas id="expense-chart"></canvas>
+      </div>
+
+      <!-- Pesan ini ditampilkan saat belum ada data -->
+      <p class="empty-chart-message" id="empty-chart-message">
+        Tambahkan transaksi untuk melihat grafik
+      </p>
+    </section>
+
+  </div><!-- /.container -->
+
+  <!-- File JavaScript utama aplikasi (defer = dijalankan setelah HTML selesai dimuat) -->
+  <script src="js/app.js" defer></script>
+
+</body>
+</html>
