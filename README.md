@@ -30,16 +30,19 @@ This application has been successfully enhanced with 3 advanced optional feature
 ## 📁 Project Structure
 
 <details>
-<summary><b>Lihat Struktur Proyek</b></summary>
+<summary><b>View Project Structure</b></summary>
 
 ```text
 project/
 ├── index.html        # Core layout & HTML structure
 ├── css/style.css     # Visual styles & mobile/desktop responsiveness
 └── js/app.js         # Main application logic (Model, Validator, View, Controller)
+```
+
+</details>
 
 ## ⚙️ How to Run Locally
 
 1. Clone this repository to your local machine.
 2. Open the project folder using a code editor (e.g., VS Code).
-3. Open index.html directly in your browser, or use the Live Server extension in VS Code for an optimal, auto-reloading development experience.
+3. Open `index.html` directly in your browser, or use the Live Server extension in VS Code for an optimal, auto-reloading development experience.
