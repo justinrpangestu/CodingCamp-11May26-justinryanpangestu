@@ -29,10 +29,14 @@ This application has been successfully enhanced with 3 advanced optional feature
 
 ## 📁 Project Structure
 
+<details>
+<summary><b>Lihat Struktur Proyek</b></summary>
+
+```text
 project/
-├── index.html          # Core layout & HTML structure
-├── css/style.css       # Visual styles & mobile/desktop responsiveness
-└── js/app.js           # Main application logic (Model, Validator, View, Controller)
+├── index.html        # Core layout & HTML structure
+├── css/style.css     # Visual styles & mobile/desktop responsiveness
+└── js/app.js         # Main application logic (Model, Validator, View, Controller)
 
 ## ⚙️ How to Run Locally
 
